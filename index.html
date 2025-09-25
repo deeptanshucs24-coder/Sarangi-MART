@@ -83,8 +83,8 @@
             <h3>Notebook</h3>
             <p>Price: ₹50</p>
             <p>Available: 20</p>
-            <input type="number" id="qty1" min="1" value="1">
-            <button onclick="addToCart('Notebook', 50, document.getElementById('qty1').value)">Add to Cart</button>
+            <input type="number" class="product-qty" data-name="Notebook" data-price="50" min="1" value="1">
+            <button class="add-cart-btn">Add to Cart</button>
         </div>
 
         <div class="product-card">
@@ -92,8 +92,8 @@
             <h3>Pen</h3>
             <p>Price: ₹10</p>
             <p>Available: 100</p>
-            <input type="number" id="qty2" min="1" value="1">
-            <button onclick="addToCart('Pen', 10, document.getElementById('qty2').value)">Add to Cart</button>
+            <input type="number" class="product-qty" data-name="Pen" data-price="10" min="1" value="1">
+            <button class="add-cart-btn">Add to Cart</button>
         </div>
 
         <div class="product-card">
@@ -101,8 +101,8 @@
             <h3>Eraser</h3>
             <p>Price: ₹5</p>
             <p>Available: 50</p>
-            <input type="number" id="qty3" min="1" value="1">
-            <button onclick="addToCart('Eraser', 5, document.getElementById('qty3').value)">Add to Cart</button>
+            <input type="number" class="product-qty" data-name="Eraser" data-price="5" min="1" value="1">
+            <button class="add-cart-btn">Add to Cart</button>
         </div>
     </div>
 
@@ -111,21 +111,36 @@
         <h3>Cart</h3>
         <div id="cart-items"></div>
         <p id="total">Total: ₹0</p>
-        <button onclick="placeOrder()">Place Order</button>
+        <button id="placeOrderBtn">Place Order</button>
     </div>
 
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <!-- Initialize EmailJS -->
     <script>
+        // Initialize EmailJS
         emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
-    </script>
-    <!-- Script.js Content -->
-    <script>
+
+        // Cart variable
         let cart = [];
 
+        // Add event listeners after DOM is loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            // Add to Cart buttons
+            document.querySelectorAll(".add-cart-btn").forEach((btn, index) => {
+                btn.addEventListener("click", () => {
+                    const input = document.querySelectorAll(".product-qty")[index];
+                    const name = input.dataset.name;
+                    const price = parseInt(input.dataset.price);
+                    const qty = parseInt(input.value);
+                    addToCart(name, price, qty);
+                });
+            });
+
+            // Place Order button
+            document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
+        });
+
         function addToCart(name, price, quantity) {
-            quantity = parseInt(quantity);
             if(quantity <= 0) return alert("Enter valid quantity");
 
             let existing = cart.find(item => item.name === name);
