@@ -1,108 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sarangi Mart</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-  emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
-</script>
-  <script>
-    (function(){
-      emailjs.init("NHtKUf_XQBBT-W7PY"); // Your EmailJS User ID
-    })();
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarangi Mart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background: #ff7e5f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .header img {
+            height: 60px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: 15px;
+            padding: 15px;
+            width: 200px;
+            text-align: center;
+        }
+        .product-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            width: 250px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .cart-item {
+            margin-bottom: 10px;
+        }
+        button {
+            background: #ff7e5f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ff5c3a;
+        }
+        input[type=number] {
+            width: 50px;
+        }
+    </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <header>
-    <img src="logo.png" alt="Sarangi Mart Logo" id="logo">
-    <h1>SARANGI MART</h1>
-    <nav>
-      <a href="#featured">Featured</a>
-      <a href="#products">Products</a>
-      <a href="#cart">Cart</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
 
-  <!-- HERO / CAROUSEL -->
-  <section id="featured" class="hero">
-    <div class="carousel">
-      <div class="slide active">
-        <img src="images/notebook.jpg" alt="Notebook">
-        <h2>Top Notebook Deals!</h2>
-      </div>
-      <div class="slide">
-        <img src="images/pen.jpg" alt="Pen">
-        <h2>High Quality Pens</h2>
-      </div>
-      <div class="slide">
-        <img src="images/waterbottle.jpg" alt="Water Bottle">
-        <h2>Stay Hydrated!</h2>
-      </div>
+    <div class="header">
+        <img src="logo.png" alt="Sarangi Mart Logo">
+        <h1>SARANGI MART</h1>
+        <p>Your Pre-Order Marketplace</p>
     </div>
-  </section>
 
-  <!-- PRODUCTS -->
-  <section id="products">
-    <h2>Our Products</h2>
-    <div class="product-grid">
-      <div class="product-card">
-        <img src="images/notebook.jpg" alt="Notebook">
-        <h3>Notebook</h3>
-        <p>Price: ₹50</p>
-        <p>Available: 20</p>
-        <input type="number" min="1" max="20" value="1">
-        <button onclick="addToCart('Notebook', 50, this.previousElementSibling.value)">Add to Cart</button>
-      </div>
-      <div class="product-card">
-        <img src="images/pen.jpg" alt="Pen">
-        <h3>Pen</h3>
-        <p>Price: ₹10</p>
-        <p>Available: 50</p>
-        <input type="number" min="1" max="50" value="1">
-        <button onclick="addToCart('Pen', 10, this.previousElementSibling.value)">Add to Cart</button>
-      </div>
-      <div class="product-card">
-        <img src="images/waterbottle.jpg" alt="Water Bottle">
-        <h3>Water Bottle</h3>
-        <p>Price: ₹120</p>
-        <p>Available: 15</p>
-        <input type="number" min="1" max="15" value="1">
-        <button onclick="addToCart('Water Bottle', 120, this.previousElementSibling.value)">Add to Cart</button>
-      </div>
+    <!-- Products Section -->
+    <div class="container">
+        <div class="product-card">
+            <img src="product1.jpg" alt="Notebook">
+            <h3>Notebook</h3>
+            <p>Price: ₹50</p>
+            <p>Available: 20</p>
+            <input type="number" id="qty1" min="1" value="1">
+            <button onclick="addToCart('Notebook', 50, document.getElementById('qty1').value)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="product2.jpg" alt="Pen">
+            <h3>Pen</h3>
+            <p>Price: ₹10</p>
+            <p>Available: 100</p>
+            <input type="number" id="qty2" min="1" value="1">
+            <button onclick="addToCart('Pen', 10, document.getElementById('qty2').value)">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="product3.jpg" alt="Eraser">
+            <h3>Eraser</h3>
+            <p>Price: ₹5</p>
+            <p>Available: 50</p>
+            <input type="number" id="qty3" min="1" value="1">
+            <button onclick="addToCart('Eraser', 5, document.getElementById('qty3').value)">Add to Cart</button>
+        </div>
     </div>
-  </section>
 
-  <!-- CART -->
-  <section id="cart">
-    <h2>Your Cart</h2>
-    <div id="cart-items"></div>
-    <h3 id="total">Total: ₹0</h3>
-    <button class="glow-button" onclick="placeOrder()">Place Order</button>
-  </section>
+    <!-- Cart Section -->
+    <div class="cart">
+        <h3>Cart</h3>
+        <div id="cart-items"></div>
+        <p id="total">Total: ₹0</p>
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
 
-  <!-- FOOTER -->
-  <footer id="contact">
-    <p>Contact us: deeptanshusarangi@gmail.com</p>
-    <p>&copy; 2025 Sarangi Mart</p>
-  </footer>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Initialize EmailJS -->
+    <script>
+        emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
+    </script>
+    <!-- Script.js Content -->
+    <script>
+        let cart = [];
 
-  <script src="script.js"></script>
-  <script>
-    // Simple carousel animation
-    const slides = document.querySelectorAll('.slide');
-    let current = 0;
-    setInterval(() => {
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }, 4000);
-  </script>
+        function addToCart(name, price, quantity) {
+            quantity = parseInt(quantity);
+            if(quantity <= 0) return alert("Enter valid quantity");
+
+            let existing = cart.find(item => item.name === name);
+            if(existing) {
+                existing.quantity += quantity;
+            } else {
+                cart.push({name, price, quantity});
+            }
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartDiv = document.getElementById("cart-items");
+            cartDiv.innerHTML = "";
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price * item.quantity;
+                const div = document.createElement("div");
+                div.classList.add("cart-item");
+                div.innerHTML = `${item.name} x ${item.quantity} = ₹${item.price*item.quantity} 
+                <button onclick="removeItem(${index})">Remove</button>`;
+                cartDiv.appendChild(div);
+            });
+            document.getElementById("total").innerText = `Total: ₹${total}`;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        function placeOrder() {
+            if(!navigator.onLine) return alert("No internet connection. Please connect and try again.");
+            if(cart.length === 0) return alert("Cart is empty!");
+
+            let orderDetails = "";
+            cart.forEach(item => {
+                orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
+            });
+            let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
+            orderDetails += `Total: ₹${total}`;
+
+            emailjs.send("service_glpy52q", "template_2gxdsn8", {
+                user_name: "Deeptanshu",
+                time: new Date().toLocaleString(),
+                order_type: "Pre-orders only",
+                message: orderDetails
+            })
+            .then(() => {
+                alert("Order sent successfully!");
+                cart = [];
+                renderCart();
+            })
+            .catch(err => {
+                alert("EmailJS Failed: " + JSON.stringify(err));
+            });
+        }
+    </script>
 </body>
 </html>
-
-
