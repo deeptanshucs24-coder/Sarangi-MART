@@ -1,9 +1,12 @@
 let cart = [];
 
+// Initialize EmailJS with your User ID
+emailjs.init("NHtKUf_XQBBT-W7PY"); // your actual User ID
+
 function addToCart(name, price, quantity) {
   quantity = parseInt(quantity);
   if(quantity <= 0) return alert("Enter valid quantity");
-  // check if already in cart
+
   let existing = cart.find(item => item.name === name);
   if(existing) {
     existing.quantity += quantity;
@@ -35,6 +38,7 @@ function removeItem(index) {
 
 function placeOrder() {
   if(cart.length === 0) return alert("Cart is empty!");
+
   let orderDetails = "Order Details:\n";
   cart.forEach(item => {
     orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
@@ -43,11 +47,14 @@ function placeOrder() {
   orderDetails += `Total: ₹${total}`;
 
   // Send order via EmailJS
-  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{message: orderDetails})
+  emailjs.send("service_glpy52q","template_2gxdsn8",{message: orderDetails})
     .then(()=> {
       alert("Order sent successfully!");
       cart = [];
       renderCart();
     })
-    .catch(()=> alert("Failed to send order. Check EmailJS setup."));
+    .catch(err => {
+      console.error(err);
+      alert("Failed to send order. Check EmailJS setup.");
+    });
 }
