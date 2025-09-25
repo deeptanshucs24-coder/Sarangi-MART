@@ -18,16 +18,29 @@
     <img src="logo.png" alt="Sarangi Mart Logo" id="logo">
     <h1>SARANGI MART</h1>
     <nav>
+      <a href="#featured">Featured</a>
       <a href="#products">Products</a>
       <a href="#cart">Cart</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h2>Welcome to Sarangi Mart!</h2>
-    <p>Your one-stop shop for all hostel essentials.</p>
+  <!-- HERO / CAROUSEL -->
+  <section id="featured" class="hero">
+    <div class="carousel">
+      <div class="slide active">
+        <img src="images/notebook.jpg" alt="Notebook">
+        <h2>Top Notebook Deals!</h2>
+      </div>
+      <div class="slide">
+        <img src="images/pen.jpg" alt="Pen">
+        <h2>High Quality Pens</h2>
+      </div>
+      <div class="slide">
+        <img src="images/waterbottle.jpg" alt="Water Bottle">
+        <h2>Stay Hydrated!</h2>
+      </div>
+    </div>
   </section>
 
   <!-- PRODUCTS -->
@@ -66,7 +79,7 @@
     <h2>Your Cart</h2>
     <div id="cart-items"></div>
     <h3 id="total">Total: ₹0</h3>
-    <button onclick="placeOrder()">Place Order</button>
+    <button class="glow-button" onclick="placeOrder()">Place Order</button>
   </section>
 
   <!-- FOOTER -->
@@ -76,5 +89,15 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // Simple carousel animation
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 4000);
+  </script>
 </body>
 </html>
