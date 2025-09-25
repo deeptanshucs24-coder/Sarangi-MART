@@ -37,31 +37,29 @@ function removeItem(index) {
 }
 
 function placeOrder() {
-  if(cart.length === 0) return alert("Cart is empty!");
+  if (cart.length === 0) return alert("Cart is empty!");
 
-  // Build order details
   let orderDetails = "";
   cart.forEach(item => {
-    orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
+    orderDetails += `${item.name} x ${item.quantity} = ₹${item.price * item.quantity}\n`;
   });
-  let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
+  let total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   orderDetails += `Total: ₹${total}`;
 
-  // Send email
   emailjs.send("service_glpy52q", "template_2gxdsn8", {
       user_name: "Deeptanshu",
       time: new Date().toLocaleString(),
       order_type: "Pre-orders only",
       message: orderDetails
   })
-  .then(response => {
-      console.log("EmailJS Success:", response);
+  .then(() => {
       alert("Order sent successfully!");
       cart = [];
       renderCart();
   })
   .catch(err => {
-      console.error("EmailJS Failed:", err);
-      alert("Failed to send order. Check console for details.");
+      alert("EmailJS Failed: " + JSON.stringify(err));
   });
 }
+
+
