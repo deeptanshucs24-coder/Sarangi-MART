@@ -1,4 +1,8 @@
+
 let cart = [];
+
+// Initialize EmailJS
+emailjs.init("NHtKUf_XQBBT-W7PY"); // Your EmailJS User ID
 
 function addToCart(name, price, quantity) {
   quantity = parseInt(quantity);
@@ -49,7 +53,7 @@ function placeOrder() {
       renderCart();
     })
     .catch(err => {
-      console.error(err);
+      console.error("EmailJS error:", err);
       alert("Failed to send order. Check EmailJS setup.");
     });
 }
