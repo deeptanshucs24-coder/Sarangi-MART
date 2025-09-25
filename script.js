@@ -1,8 +1,7 @@
+// Initialize EmailJS
+emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
 
 let cart = [];
-
-// Initialize EmailJS
-emailjs.init("NHtKUf_XQBBT-W7PY"); // Your EmailJS User ID
 
 function addToCart(name, price, quantity) {
   quantity = parseInt(quantity);
@@ -39,21 +38,30 @@ function removeItem(index) {
 
 function placeOrder() {
   if(cart.length === 0) return alert("Cart is empty!");
-  let orderDetails = "Order Details:\n";
+
+  // Build order details
+  let orderDetails = "";
   cart.forEach(item => {
     orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
   });
   let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
   orderDetails += `Total: ₹${total}`;
 
-  emailjs.send("service_glpy52q","template_2gxdsn8",{message: orderDetails})
-    .then(()=> {
+  // Send email
+  emailjs.send("service_glpy52q", "template_2gxdsn8", {
+      user_name: "Deeptanshu",
+      time: new Date().toLocaleString(),
+      order_type: "Pre-orders only",
+      message: orderDetails
+  })
+  .then(response => {
+      console.log("EmailJS Success:", response);
       alert("Order sent successfully!");
       cart = [];
       renderCart();
-    })
-    .catch(err => {
-      console.error("EmailJS error:", err);
-      alert("Failed to send order. Check EmailJS setup.");
-    });
+  })
+  .catch(err => {
+      console.error("EmailJS Failed:", err);
+      alert("Failed to send order. Check console for details.");
+  });
 }
