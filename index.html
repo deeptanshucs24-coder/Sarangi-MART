@@ -2,180 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sarangi Mart</title>
+  <title>SARANGI MART</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
       margin: 0;
       padding: 0;
+      background: #f4f7fc;
+      color: #333;
     }
-    .header {
-      background: #ff7e5f;
-      color: white;
-      text-align: center;
+    header {
+      background: #ff6600;
       padding: 20px;
+      text-align: center;
+      color: white;
     }
-    .header img {
-      height: 120px; /* Bigger Logo */
-      margin-bottom: 10px;
+    header img {
+      width: 120px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
     }
     .container {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
+      justify-content: space-between;
       padding: 20px;
     }
-    .product-card {
+    .products, .cart {
+      width: 48%;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin: 15px;
-      padding: 15px;
-      width: 200px;
-      text-align: center;
-    }
-    .product-card img {
-      width: 100%;
-      border-radius: 10px;
-    }
-    .cart {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      width: 280px;
+      padding: 20px;
+      border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .cart-item {
-      margin-bottom: 10px;
+    .product {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
     }
-    button {
-      background: #ff7e5f;
+    .product h3 {
+      margin: 0;
+    }
+    .product button {
+      background: #ff6600;
       color: white;
       border: none;
-      border-radius: 5px;
-      padding: 8px 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
       cursor: pointer;
     }
-    button:hover {
-      background: #ff5c3a;
+    .product button:disabled {
+      background: gray;
+      cursor: not-allowed;
     }
-    input[type=number], input[type=text] {
-      padding: 5px;
-      margin: 5px 0;
-      width: 90%;
+    .cart-item {
+      border-bottom: 1px dashed #ccc;
+      padding: 8px 0;
     }
-    .payment-section {
+    #place-order {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: green;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #instructions {
       margin-top: 15px;
+      font-size: 14px;
+      color: #444;
+      background: #fff8e1;
       padding: 10px;
-      border-top: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    input {
+      margin: 6px 0;
+      padding: 8px;
+      width: 95%;
+      border: 1px solid #ddd;
+      border-radius: 6px;
     }
   </style>
-</head>
-<body>
-
-  <div class="header">
-    <img src="logo.png" alt="Sarangi Mart Logo">
-    <h1>SARANGI MART</h1>
-    <p>Your Pre-Order Marketplace</p>
-  </div>
-
-  <!-- Products Section -->
-  <div class="container" id="product-list">
-    <div class="product-card" data-stock="4">
-      <img src="kurkure-green-chutney.jpg" alt="Kurkure Green Chutney">
-      <h3>Kurkure Green Chutney</h3>
-      <p>Price: ₹20</p>
-      <p class="stock">Available: 4</p>
-      <input type="number" class="product-qty" data-name="Kurkure Green Chutney" data-price="20" min="1" value="1">
-      <button class="add-cart-btn">Add to Cart</button>
-    </div>
-
-    <div class="product-card" data-stock="2">
-      <img src="puffcons.jpg" alt="Puffcons">
-      <h3>Puffcons</h3>
-      <p>Price: ₹20</p>
-      <p class="stock">Available: 2</p>
-      <input type="number" class="product-qty" data-name="Puffcons" data-price="20" min="1" value="1">
-      <button class="add-cart-btn">Add to Cart</button>
-    </div>
-  </div>
-
-  <!-- Cart Section -->
-  <div class="cart">
-    <h3>Cart</h3>
-    <label>Name:</label>
-    <input type="text" id="buyerName" placeholder="Enter your name" required>
-    <label>Room Number:</label>
-    <input type="text" id="roomNumber" placeholder="Enter your room number" required>
-    <div id="cart-items"></div>
-    <p id="total">Total: ₹0</p>
-
-    <div class="payment-section">
-      <h4>Payment</h4>
-      <p>Scan & Pay via UPI or click below:</p>
-      <a id="upiLink" target="_blank">
-        <button type="button">Pay with UPI</button>
-      </a>
-      <p><strong>UPI ID:</strong> 9482104387@fam</p>
-      <label>Transaction ID:</label>
-      <input type="text" id="txnId" placeholder="Enter UPI Transaction ID">
-    </div>
-
-    <button id="placeOrderBtn">Place Order</button>
-    <p style="font-size: 12px; margin-top: 10px; color: gray;">Collect items from Room <b>B116</b> after payment confirmation.</p>
-  </div>
-
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
-    emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
+    emailjs.init("NHtKUf_XQBBT-W7PY"); // Your EmailJS Public Key
+
+    let products = [
+      {name: "Kurkure Green Chutney", price: 20, stock: 3},
+      {name: "KitKat", price: 149, stock: 2},
+      {name: "Choco Pie", price: 12, stock: 5},
+      {name: "Uncle Chips", price: 50, stock: 1}
+    ];
 
     let cart = [];
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".add-cart-btn").forEach((btn, index) => {
-        btn.addEventListener("click", () => {
-          const card = btn.closest(".product-card");
-          const stockElem = card.querySelector(".stock");
-          const stock = parseInt(card.dataset.stock);
-          const input = card.querySelector(".product-qty");
-          const name = input.dataset.name;
-          const price = parseInt(input.dataset.price);
-          const qty = parseInt(input.value);
-
-          if(qty > stock) return alert("Not enough stock available!");
-          addToCart(card, stockElem, name, price, qty);
-        });
+    function renderProducts() {
+      const productDiv = document.getElementById("products");
+      productDiv.innerHTML = "";
+      products.forEach((p, index) => {
+        const div = document.createElement("div");
+        div.classList.add("product");
+        div.innerHTML = `
+          <h3>${p.name}</h3>
+          <p>Price: ₹${p.price}</p>
+          <p id="stock-${index}">Stock left: ${p.stock > 0 ? p.stock : "Out of Stock"}</p>
+          <input type="number" id="qty-${index}" min="1" max="${p.stock}" value="1" ${p.stock === 0 ? "disabled" : ""}>
+          <button onclick="addToCart(${index})" ${p.stock === 0 ? "disabled" : ""}>Add to Cart</button>
+        `;
+        productDiv.appendChild(div);
       });
-
-      document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
-    });
-
-    function addToCart(card, stockElem, name, price, quantity) {
-      let existing = cart.find(item => item.name === name);
-      if(existing) {
-        existing.quantity += quantity;
-      } else {
-        cart.push({name, price, quantity, card, stockElem});
-      }
-      card.dataset.stock = parseInt(card.dataset.stock) - quantity;
-      updateStock(card, stockElem);
-      renderCart();
     }
 
-    function updateStock(card, stockElem) {
-      let stock = parseInt(card.dataset.stock);
-      if(stock <= 0) {
-        stockElem.innerText = "Out of Stock";
-        card.querySelector(".add-cart-btn").disabled = true;
+    function addToCart(index) {
+      let qty = parseInt(document.getElementById(`qty-${index}`).value);
+      if(isNaN(qty) || qty <= 0) return alert("Enter valid quantity!");
+      if(qty > products[index].stock) return alert("Not enough stock!");
+
+      let existing = cart.find(item => item.name === products[index].name);
+      if(existing) {
+        existing.quantity += qty;
       } else {
-        stockElem.innerText = "Available: " + stock;
+        cart.push({name: products[index].name, price: products[index].price, quantity: qty});
       }
+      products[index].stock -= qty; // reduce stock immediately
+      renderProducts();
+      renderCart();
     }
 
     function renderCart() {
@@ -186,57 +142,73 @@
         total += item.price * item.quantity;
         const div = document.createElement("div");
         div.classList.add("cart-item");
-        div.innerHTML = `${item.name} x ${item.quantity} = ₹${item.price * item.quantity} 
-          <button onclick="removeItem(${index})">Remove</button>`;
+        div.innerHTML = `${item.name} x ${item.quantity} = ₹${item.price*item.quantity} 
+        <button onclick="removeItem(${index})">Remove</button>`;
         cartDiv.appendChild(div);
       });
       document.getElementById("total").innerText = `Total: ₹${total}`;
-      document.getElementById("upiLink").href = `upi://pay?pa=9482104387@fam&pn=Sarangi%20Mart&am=${total}&cu=INR`;
     }
 
     function removeItem(index) {
       let item = cart[index];
-      item.card.dataset.stock = parseInt(item.card.dataset.stock) + item.quantity;
-      updateStock(item.card, item.stockElem);
+      let product = products.find(p => p.name === item.name);
+      if(product) {
+        product.stock += item.quantity; // restore stock
+      }
       cart.splice(index, 1);
+      renderProducts();
       renderCart();
     }
 
     function placeOrder() {
-      if (!navigator.onLine) return alert("No internet connection. Please connect and try again.");
-      if (cart.length === 0) return alert("Cart is empty!");
+      const name = document.getElementById("cust-name").value.trim();
+      const room = document.getElementById("cust-room").value.trim();
 
-      let buyerName = document.getElementById("buyerName").value.trim();
-      let roomNumber = document.getElementById("roomNumber").value.trim();
-      let txnId = document.getElementById("txnId").value.trim();
+      if(!name || !room) return alert("Please enter your Name and Room Number!");
+      if(cart.length === 0) return alert("Cart is empty!");
 
-      if (!buyerName || !roomNumber) return alert("Please enter your name and room number.");
-      if (!txnId) return alert("Please enter your Transaction ID after payment!");
-
-      let orderDetails = "";
+      let orderDetails = `Order by ${name}, Room ${room}\n\n`;
       cart.forEach(item => {
-        orderDetails += `${item.name} x ${item.quantity} = ₹${item.price * item.quantity}\n`;
+        orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
       });
-      let total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-      orderDetails += `\nTotal: ₹${total}`;
+      let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
+      orderDetails += `Total: ₹${total}\n\nCollect your order from Room B116.\nPay via UPI before collecting: 9482104387@fam`;
 
-      emailjs.send("service_glpy52q", "template_2gxdsn8", {
-        user_name: buyerName,
-        room_number: roomNumber,
-        time: new Date().toLocaleString(),
-        order_type: "Pre-orders only",
-        message: orderDetails,
-        transaction_id: txnId
-      })
-      .then(() => {
-        alert("✅ Order placed successfully! Collect items from Room B116 after payment confirmation.");
-        cart = [];
-        renderCart();
-      })
-      .catch(err => {
-        alert("EmailJS Failed: " + JSON.stringify(err));
-      });
+      emailjs.send("service_glpy52q","template_2gxdsn8",{message: orderDetails})
+        .then(()=> {
+          alert("✅ Order placed successfully! Please pay via UPI and collect from Room B116.");
+          cart = [];
+          renderCart();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("❌ Failed to send order. Check console for details.");
+        });
     }
+
+    window.onload = renderProducts;
   </script>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Sarangi Mart Logo">
+    <h1>Welcome to SARANGI MART</h1>
+    <p>Hostel Pre-Order System</p>
+  </header>
+  <div class="container">
+    <div class="products" id="products"></div>
+    <div class="cart">
+      <h2>Your Cart</h2>
+      <div id="cart-items"></div>
+      <p id="total">Total: ₹0</p>
+      <h3>Enter Your Details</h3>
+      <input type="text" id="cust-name" placeholder="Your Name">
+      <input type="text" id="cust-room" placeholder="Room Number">
+      <button id="place-order" onclick="placeOrder()">Place Order</button>
+      <div id="instructions">
+        💡 After placing your order, please pay via UPI to <b>9482104387@fam</b> and collect from <b>Room B116</b>.
+      </div>
+    </div>
+  </div>
 </body>
 </html>
