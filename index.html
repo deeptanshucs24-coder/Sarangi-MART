@@ -27,10 +27,6 @@
       margin: 0;
       font-size: 36px;
     }
-    .header p {
-      margin: 5px 0 0 0;
-      font-size: 18px;
-    }
     .container {
       display: flex;
       flex-wrap: wrap;
@@ -58,7 +54,7 @@
       background: white;
       border-radius: 10px;
       padding: 15px;
-      width: 300px;
+      width: 320px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .cart-item {
@@ -72,14 +68,25 @@
       padding: 8px 12px;
       cursor: pointer;
     }
-    button:hover {
-      background: #ff5c3a;
+    button:disabled {
+      background: gray;
+      cursor: not-allowed;
     }
     input[type=number], input[type=text] {
       width: 100%;
       margin-bottom: 5px;
       padding: 5px;
       box-sizing: border-box;
+    }
+    #upiSection {
+      display: none;
+      margin-top: 10px;
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    #upiSection p {
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -92,8 +99,7 @@
   </div>
 
   <!-- Products Section -->
-  <div class="container">
-   <div class="product-card"> <img src="kurkure-green-chutney.jpg" alt="Kurkure Green Chutney"> <h3>Kurkure Green Chutney</h3> <p>Price: ₹20</p> <p>Available: 03</p> <input type="number" class="product-qty" data-name="Kurkure Green Chutney" data-price="20" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="product2.jpg" alt="Tedhe mede"> <h3>TEDE mede</h3> <p>Price: ₹20</p> <p>Available: 01</p> <input type="number" class="product-qty" data-name="Tede Mede" data-price="25" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="puffcons.jpg" alt="Puffcons"> <h3>Puffcons</h3> <p>Price: ₹20</p> <p>Available: 02</p> <input type="number" class="product-qty" data-name="Puffcons" data-price="20" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="kitkat.jpg" alt="KitKat"> <h3>KitKat</h3> <p>Price: ₹149</p> <p>Available: 01</p> <input type="number" class="product-qty" data-name="KitKat" data-price="149" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="chocopie.jpg" alt="ChocoPie"> <h3>ChocoPie</h3> <p>Price: ₹12</p> <p>Available: 18</p> <input type="number" class="product-qty" data-name="ChocoPie" data-price="12" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="uncle-chips.jpg" alt="Uncle Chips"> <h3>Uncle Chips</h3> <p>Price: ₹50</p> <p>Available: 01</p> <input type="number" class="product-qty" data-name="Uncle Chips" data-price="50" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="yoga-protein-bar-blueberry.jpg" alt="Yoga Protein Bar Blueberry"> <h3>Yoga Protein Bar Blueberry</h3> <p>Price: ₹40</p> <p>Available: 01</p> <input type="number" class="product-qty" data-name="Yoga Protein Bar Blueberry" data-price="40" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="strawberry-protein-bar.jpg" alt="Strawberry Protein Bar"> <h3>Strawberry Protein Bar</h3> <p>Price: ₹40</p> <p>Available: 01</p> <input type="number" class="product-qty" data-name="Strawberry Protein Bar" data-price="40" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="lays-magic-masala.jpg" alt="Lays Magic Masala"> <h3>Lays Magic Masala</h3> <p>Price: ₹20</p> <p>Available: 02</p> <input type="number" class="product-qty" data-name="Lays Magic Masala" data-price="20" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="lays-hot-and-sweet.jpg" alt="Lays Hot and Sweet"> <h3>Lays Hot and Sweet</h3> <p>Price: ₹30</p> <p>Available: 02</p> <input type="number" class="product-qty" data-name="Lays Hot and Sweet" data-price="30" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="bingo-mad-angles-very-peri-peri.jpg" alt="Bingo Mad Angles Very Peri Peri"> <h3>Bingo Mad Angles Very Peri Peri</h3> <p>Price: ₹30</p> <p>Available: 02</p> <input type="number" class="product-qty" data-name="Bingo Mad Angles Very Peri Peri" data-price="30" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> <div class="product-card"> <img src="product3.jpg" alt="HIDE AND SEEK"> <h3>HIDE AND SEEK</h3> <p>Price: ₹30</p> <p>Available: 03</p> <input type="number" class="product-qty" data-name="Hide and seek" data-price="30" min="1" value="1"> <button class="add-cart-btn">Add to Cart</button> </div> </div>
+  <div class="container" id="productContainer"></div>
 
   <!-- Cart Section -->
   <div class="cart">
@@ -105,39 +111,70 @@
     <input type="text" id="buyerName" placeholder="Enter Your Name">
     <input type="text" id="roomNumber" placeholder="Enter Room Number">
 
-    <button id="placeOrderBtn">Place Order</button>
+    <button id="proceedPaymentBtn">Proceed to Pay</button>
+
+    <!-- UPI Section -->
+    <div id="upiSection">
+      <p><strong>Step 1:</strong> Pay using UPI:</p>
+      <p id="upiLink"></p>
+      <p><strong>Step 2:</strong> After payment, click confirm:</p>
+      <button id="placeOrderBtn">Confirm Payment & Place Order</button>
+    </div>
   </div>
 
   <!-- EmailJS SDK -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
+    emailjs.init("NHtKUf_XQBBT-W7PY"); // Your EmailJS User ID
+
+    // Products with stock
+    let products = [
+      { name: "Parle Chips", price: 40, stock: 1, img: "product1.jpg" },
+      { name: "Kurkure Green Chutney", price: 20, stock: 3, img: "kurkure-green-chutney.jpg" },
+      { name: "Puffcons", price: 20, stock: 2, img: "puffcons.jpg" }
+    ];
 
     let cart = [];
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll(".add-cart-btn").forEach((btn, index) => {
-        btn.addEventListener("click", () => {
-          const input = document.querySelectorAll(".product-qty")[index];
-          const name = input.dataset.name;
-          const price = parseInt(input.dataset.price);
-          const qty = parseInt(input.value);
-          addToCart(name, price, qty);
-        });
+    // Render products
+    function renderProducts() {
+      const container = document.getElementById("productContainer");
+      container.innerHTML = "";
+      products.forEach((p, index) => {
+        const div = document.createElement("div");
+        div.classList.add("product-card");
+        div.innerHTML = `
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>Price: ₹${p.price}</p>
+          <p id="stock-${index}">${p.stock > 0 ? "Available: " + p.stock : "<b style='color:red'>Out of Stock</b>"}</p>
+          <input type="number" class="product-qty" data-index="${index}" min="1" value="1" ${p.stock <= 0 ? "disabled" : ""}>
+          <button class="add-cart-btn" ${p.stock <= 0 ? "disabled" : ""}>Add to Cart</button>
+        `;
+        container.appendChild(div);
       });
 
-      document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
-    });
+      // Add event listeners
+      document.querySelectorAll(".add-cart-btn").forEach((btn, i) => {
+        btn.addEventListener("click", () => {
+          const input = document.querySelector(`.product-qty[data-index="${i}"]`);
+          const qty = parseInt(input.value);
+          addToCart(i, qty);
+        });
+      });
+    }
 
-    function addToCart(name, price, quantity) {
-      if(quantity <= 0) return alert("Enter valid quantity");
-
-      let existing = cart.find(item => item.name === name);
-      if(existing) existing.quantity += quantity;
-      else cart.push({name, price, quantity});
+    // Add to cart
+    function addToCart(index, qty) {
+      let p = products[index];
+      if(qty > p.stock) return alert("Not enough stock!");
+      let existing = cart.find(item => item.name === p.name);
+      if(existing) existing.quantity += qty;
+      else cart.push({name: p.name, price: p.price, quantity: qty, index});
       renderCart();
     }
 
+    // Render cart
     function renderCart() {
       const cartDiv = document.getElementById("cart-items");
       cartDiv.innerHTML = "";
@@ -153,25 +190,40 @@
       document.getElementById("total").innerText = `Total: ₹${total}`;
     }
 
+    // Remove item
     function removeItem(index) {
       cart.splice(index, 1);
       renderCart();
     }
 
-    function placeOrder() {
-      if(!navigator.onLine) return alert("No internet connection.");
+    // Proceed to UPI
+    document.getElementById("proceedPaymentBtn").addEventListener("click", () => {
       if(cart.length === 0) return alert("Cart is empty!");
-
       const buyerName = document.getElementById("buyerName").value.trim();
       const roomNumber = document.getElementById("roomNumber").value.trim();
-      if(!buyerName || !roomNumber) return alert("Please enter Name and Room Number!");
+      if(!buyerName || !roomNumber) return alert("Enter Name and Room Number!");
+
+      let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
+      let upiId = "yourupiid@upi"; // Replace with your UPI ID
+      let upiURL = `upi://pay?pa=${upiId}&pn=SarangiMart&am=${total}&cu=INR`;
+
+      document.getElementById("upiLink").innerHTML = `<a href="${upiURL}" target="_blank">${upiURL}</a>`;
+      document.getElementById("upiSection").style.display = "block";
+    });
+
+    // Place Order after UPI payment
+    document.getElementById("placeOrderBtn").addEventListener("click", () => {
+      const buyerName = document.getElementById("buyerName").value.trim();
+      const roomNumber = document.getElementById("roomNumber").value.trim();
 
       let orderDetails = `Buyer: ${buyerName}\nRoom: ${roomNumber}\n\nOrder Details:\n`;
+      let total = 0;
       cart.forEach(item => {
         orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
+        total += item.price*item.quantity;
+        products[item.index].stock -= item.quantity; // Reduce stock
       });
-      let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
-      orderDetails += `Total: ₹${total}`;
+      orderDetails += `Total: ₹${total}\n\nCollect from Room B116`;
 
       emailjs.send("service_glpy52q", "template_2gxdsn8", {
         user_name: buyerName,
@@ -181,17 +233,20 @@
         message: orderDetails
       })
       .then(() => {
-        alert("Order sent successfully!");
+        alert("Order placed! Please collect from Room B116.");
         cart = [];
         renderCart();
+        renderProducts(); // update stock display
         document.getElementById("buyerName").value = "";
         document.getElementById("roomNumber").value = "";
+        document.getElementById("upiSection").style.display = "none";
       })
       .catch(err => {
         alert("EmailJS Failed: " + JSON.stringify(err));
       });
-    }
+    });
+
+    renderProducts();
   </script>
 </body>
 </html>
-
