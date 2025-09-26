@@ -15,37 +15,30 @@
       background: #ff7e5f;
       color: white;
       text-align: center;
-      padding: 30px 20px;
+      padding: 20px;
     }
     .header img {
-      max-width: 200px;
-      height: auto;
-      display: block;
-      margin: 0 auto 15px auto;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 36px;
+      height: 120px; /* Bigger Logo */
+      margin-bottom: 10px;
     }
     .container {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: space-around;
       padding: 20px;
-      gap: 20px;
     }
     .product-card {
       background: white;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin: 15px;
       padding: 15px;
-      width: 220px;
+      width: 200px;
       text-align: center;
     }
     .product-card img {
       width: 100%;
       border-radius: 10px;
-      margin-bottom: 10px;
     }
     .cart {
       position: fixed;
@@ -54,7 +47,7 @@
       background: white;
       border-radius: 10px;
       padding: 15px;
-      width: 320px;
+      width: 280px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .cart-item {
@@ -68,25 +61,18 @@
       padding: 8px 12px;
       cursor: pointer;
     }
-    button:disabled {
-      background: gray;
-      cursor: not-allowed;
+    button:hover {
+      background: #ff5c3a;
     }
     input[type=number], input[type=text] {
-      width: 100%;
-      margin-bottom: 5px;
       padding: 5px;
-      box-sizing: border-box;
-    }
-    #upiSection {
-      display: none;
-      margin-top: 10px;
-      background: #f0f0f0;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    #upiSection p {
       margin: 5px 0;
+      width: 90%;
+    }
+    .payment-section {
+      margin-top: 15px;
+      padding: 10px;
+      border-top: 1px solid #ddd;
     }
   </style>
 </head>
@@ -99,82 +85,99 @@
   </div>
 
   <!-- Products Section -->
-  <div class="container" id="productContainer"></div>
+  <div class="container" id="product-list">
+    <div class="product-card" data-stock="4">
+      <img src="kurkure-green-chutney.jpg" alt="Kurkure Green Chutney">
+      <h3>Kurkure Green Chutney</h3>
+      <p>Price: ₹20</p>
+      <p class="stock">Available: 4</p>
+      <input type="number" class="product-qty" data-name="Kurkure Green Chutney" data-price="20" min="1" value="1">
+      <button class="add-cart-btn">Add to Cart</button>
+    </div>
+
+    <div class="product-card" data-stock="2">
+      <img src="puffcons.jpg" alt="Puffcons">
+      <h3>Puffcons</h3>
+      <p>Price: ₹20</p>
+      <p class="stock">Available: 2</p>
+      <input type="number" class="product-qty" data-name="Puffcons" data-price="20" min="1" value="1">
+      <button class="add-cart-btn">Add to Cart</button>
+    </div>
+  </div>
 
   <!-- Cart Section -->
   <div class="cart">
     <h3>Cart</h3>
+    <label>Name:</label>
+    <input type="text" id="buyerName" placeholder="Enter your name" required>
+    <label>Room Number:</label>
+    <input type="text" id="roomNumber" placeholder="Enter your room number" required>
     <div id="cart-items"></div>
     <p id="total">Total: ₹0</p>
 
-    <!-- Buyer Details -->
-    <input type="text" id="buyerName" placeholder="Enter Your Name">
-    <input type="text" id="roomNumber" placeholder="Enter Room Number">
-
-    <button id="proceedPaymentBtn">Proceed to Pay</button>
-
-    <!-- UPI Section -->
-    <div id="upiSection">
-      <p><strong>Step 1:</strong> Pay using UPI:</p>
-      <p id="upiLink"></p>
-      <p><strong>Step 2:</strong> After payment, click confirm:</p>
-      <button id="placeOrderBtn">Confirm Payment & Place Order</button>
+    <div class="payment-section">
+      <h4>Payment</h4>
+      <p>Scan & Pay via UPI or click below:</p>
+      <a id="upiLink" target="_blank">
+        <button type="button">Pay with UPI</button>
+      </a>
+      <p><strong>UPI ID:</strong> 9482104387@fam</p>
+      <label>Transaction ID:</label>
+      <input type="text" id="txnId" placeholder="Enter UPI Transaction ID">
     </div>
+
+    <button id="placeOrderBtn">Place Order</button>
+    <p style="font-size: 12px; margin-top: 10px; color: gray;">Collect items from Room <b>B116</b> after payment confirmation.</p>
   </div>
 
   <!-- EmailJS SDK -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    emailjs.init("NHtKUf_XQBBT-W7PY"); // Your EmailJS User ID
-
-    // Products with stock
-    let products = [
-      { name: "Parle Chips", price: 40, stock: 1, img: "product1.jpg" },
-      { name: "Kurkure Green Chutney", price: 20, stock: 3, img: "kurkure-green-chutney.jpg" },
-      { name: "Puffcons", price: 20, stock: 2, img: "puffcons.jpg" }
-    ];
+    emailjs.init("NHtKUf_XQBBT-W7PY"); // Your User ID
 
     let cart = [];
 
-    // Render products
-    function renderProducts() {
-      const container = document.getElementById("productContainer");
-      container.innerHTML = "";
-      products.forEach((p, index) => {
-        const div = document.createElement("div");
-        div.classList.add("product-card");
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <h3>${p.name}</h3>
-          <p>Price: ₹${p.price}</p>
-          <p id="stock-${index}">${p.stock > 0 ? "Available: " + p.stock : "<b style='color:red'>Out of Stock</b>"}</p>
-          <input type="number" class="product-qty" data-index="${index}" min="1" value="1" ${p.stock <= 0 ? "disabled" : ""}>
-          <button class="add-cart-btn" ${p.stock <= 0 ? "disabled" : ""}>Add to Cart</button>
-        `;
-        container.appendChild(div);
-      });
-
-      // Add event listeners
-      document.querySelectorAll(".add-cart-btn").forEach((btn, i) => {
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".add-cart-btn").forEach((btn, index) => {
         btn.addEventListener("click", () => {
-          const input = document.querySelector(`.product-qty[data-index="${i}"]`);
+          const card = btn.closest(".product-card");
+          const stockElem = card.querySelector(".stock");
+          const stock = parseInt(card.dataset.stock);
+          const input = card.querySelector(".product-qty");
+          const name = input.dataset.name;
+          const price = parseInt(input.dataset.price);
           const qty = parseInt(input.value);
-          addToCart(i, qty);
+
+          if(qty > stock) return alert("Not enough stock available!");
+          addToCart(card, stockElem, name, price, qty);
         });
       });
-    }
 
-    // Add to cart
-    function addToCart(index, qty) {
-      let p = products[index];
-      if(qty > p.stock) return alert("Not enough stock!");
-      let existing = cart.find(item => item.name === p.name);
-      if(existing) existing.quantity += qty;
-      else cart.push({name: p.name, price: p.price, quantity: qty, index});
+      document.getElementById("placeOrderBtn").addEventListener("click", placeOrder);
+    });
+
+    function addToCart(card, stockElem, name, price, quantity) {
+      let existing = cart.find(item => item.name === name);
+      if(existing) {
+        existing.quantity += quantity;
+      } else {
+        cart.push({name, price, quantity, card, stockElem});
+      }
+      card.dataset.stock = parseInt(card.dataset.stock) - quantity;
+      updateStock(card, stockElem);
       renderCart();
     }
 
-    // Render cart
+    function updateStock(card, stockElem) {
+      let stock = parseInt(card.dataset.stock);
+      if(stock <= 0) {
+        stockElem.innerText = "Out of Stock";
+        card.querySelector(".add-cart-btn").disabled = true;
+      } else {
+        stockElem.innerText = "Available: " + stock;
+      }
+    }
+
     function renderCart() {
       const cartDiv = document.getElementById("cart-items");
       cartDiv.innerHTML = "";
@@ -183,70 +186,57 @@
         total += item.price * item.quantity;
         const div = document.createElement("div");
         div.classList.add("cart-item");
-        div.innerHTML = `${item.name} x ${item.quantity} = ₹${item.price*item.quantity} 
-        <button onclick="removeItem(${index})">Remove</button>`;
+        div.innerHTML = `${item.name} x ${item.quantity} = ₹${item.price * item.quantity} 
+          <button onclick="removeItem(${index})">Remove</button>`;
         cartDiv.appendChild(div);
       });
       document.getElementById("total").innerText = `Total: ₹${total}`;
+      document.getElementById("upiLink").href = `upi://pay?pa=9482104387@fam&pn=Sarangi%20Mart&am=${total}&cu=INR`;
     }
 
-    // Remove item
     function removeItem(index) {
+      let item = cart[index];
+      item.card.dataset.stock = parseInt(item.card.dataset.stock) + item.quantity;
+      updateStock(item.card, item.stockElem);
       cart.splice(index, 1);
       renderCart();
     }
 
-    // Proceed to UPI
-    document.getElementById("proceedPaymentBtn").addEventListener("click", () => {
-      if(cart.length === 0) return alert("Cart is empty!");
-      const buyerName = document.getElementById("buyerName").value.trim();
-      const roomNumber = document.getElementById("roomNumber").value.trim();
-      if(!buyerName || !roomNumber) return alert("Enter Name and Room Number!");
+    function placeOrder() {
+      if (!navigator.onLine) return alert("No internet connection. Please connect and try again.");
+      if (cart.length === 0) return alert("Cart is empty!");
 
-      let total = cart.reduce((acc,item)=> acc + item.price*item.quantity,0);
-      let upiId = "yourupiid@upi"; // Replace with your UPI ID
-      let upiURL = `upi://pay?pa=${upiId}&pn=SarangiMart&am=${total}&cu=INR`;
+      let buyerName = document.getElementById("buyerName").value.trim();
+      let roomNumber = document.getElementById("roomNumber").value.trim();
+      let txnId = document.getElementById("txnId").value.trim();
 
-      document.getElementById("upiLink").innerHTML = `<a href="${upiURL}" target="_blank">${upiURL}</a>`;
-      document.getElementById("upiSection").style.display = "block";
-    });
+      if (!buyerName || !roomNumber) return alert("Please enter your name and room number.");
+      if (!txnId) return alert("Please enter your Transaction ID after payment!");
 
-    // Place Order after UPI payment
-    document.getElementById("placeOrderBtn").addEventListener("click", () => {
-      const buyerName = document.getElementById("buyerName").value.trim();
-      const roomNumber = document.getElementById("roomNumber").value.trim();
-
-      let orderDetails = `Buyer: ${buyerName}\nRoom: ${roomNumber}\n\nOrder Details:\n`;
-      let total = 0;
+      let orderDetails = "";
       cart.forEach(item => {
-        orderDetails += `${item.name} x ${item.quantity} = ₹${item.price*item.quantity}\n`;
-        total += item.price*item.quantity;
-        products[item.index].stock -= item.quantity; // Reduce stock
+        orderDetails += `${item.name} x ${item.quantity} = ₹${item.price * item.quantity}\n`;
       });
-      orderDetails += `Total: ₹${total}\n\nCollect from Room B116`;
+      let total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+      orderDetails += `\nTotal: ₹${total}`;
 
       emailjs.send("service_glpy52q", "template_2gxdsn8", {
         user_name: buyerName,
         room_number: roomNumber,
         time: new Date().toLocaleString(),
         order_type: "Pre-orders only",
-        message: orderDetails
+        message: orderDetails,
+        transaction_id: txnId
       })
       .then(() => {
-        alert("Order placed! Please collect from Room B116.");
+        alert("✅ Order placed successfully! Collect items from Room B116 after payment confirmation.");
         cart = [];
         renderCart();
-        renderProducts(); // update stock display
-        document.getElementById("buyerName").value = "";
-        document.getElementById("roomNumber").value = "";
-        document.getElementById("upiSection").style.display = "none";
       })
       .catch(err => {
         alert("EmailJS Failed: " + JSON.stringify(err));
       });
-    });
-
-    renderProducts();
+    }
   </script>
 </body>
 </html>
