@@ -2,224 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sarangi-MART</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      background: linear-gradient(to right, #f9f9f9, #e3f2fd);
-      color: #333;
-    }
-    header {
-      background: #1976d2;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    header img {
-      width: 120px;
-      margin-bottom: 10px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: 2px;
-    }
-    .container {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px;
-    }
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      flex: 3;
-    }
-    .product-card {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
-    }
-    .product-card:hover {
-      transform: translateY(-5px);
-    }
-    .product-card img {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      margin-bottom: 10px;
-      border-radius: 10px;
-    }
-    .product-card h2 {
-      font-size: 18px;
-      margin: 5px 0;
-    }
-    .product-card p {
-      margin: 3px 0;
-      font-size: 14px;
-    }
-    .product-card button {
-      margin-top: 8px;
-      padding: 8px 12px;
-      border: none;
-      background: #1976d2;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .product-card button:disabled {
-      background: gray;
-      cursor: not-allowed;
-    }
-    .cart {
-      flex: 1;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      max-height: 500px;
-      overflow-y: auto;
-    }
-    .cart h2 {
-      margin-top: 0;
-      font-size: 20px;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
-    }
-    .cart p {
-      font-size: 14px;
-    }
-    .place-order {
-      margin-top: 15px;
-      background: #43a047;
-      padding: 10px;
-      border: none;
-      color: white;
-      width: 100%;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .instructions {
-      background: #fff3cd;
-      border: 1px solid #ffeeba;
-      color: #856404;
-      padding: 10px;
-      margin: 20px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-  </style>
+  <title>Order Checkout</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+  <script>
+    (function() {
+      // Initialize EmailJS with your Public Key
+      emailjs.init("NHtKUf_XQBBT-W7PY");
+    })();
+  </script>
 </head>
 <body>
+  <h1>Place Your Order</h1>
+  <form id="orderForm">
+    <label>Name:</label><br>
+    <input type="text" id="name" required><br><br>
+    
+    <label>Email:</label><br>
+    <input type="email" id="email" required><br><br>
+    
+    <label>Product:</label><br>
+    <select id="product" required>
+      <option value="Kurkure Green Chutney">Kurkure Green Chutney</option>
+      <option value="KitKat">KitKat</option>
+      <option value="ChocoPie">ChocoPie</option>
+      <option value="Uncle Chips">Uncle Chips</option>
+    </select><br><br>
+    
+    <label>Quantity:</label><br>
+    <input type="number" id="quantity" min="1" required><br><br>
+    
+    <button type="submit">Place Order</button>
+  </form>
 
-  <header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/No_Image_Available.jpg/640px-No_Image_Available.jpg" alt="Logo">
-    <h1>Welcome to Sarangi-MART</h1>
-    <p>Snacks, Treats & More — Collect from Room <b>B116</b></p>
-  </header>
+  <p id="status"></p>
 
-  <div class="instructions">
-    ⚠️ Please complete your UPI payment to <b>9482104387@fam</b> before collecting.  
-    Orders are to be collected from <b>Room B116</b>. Stocks update live!
-  </div>
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-  <div class="container">
-    <!-- Products Section -->
-    <div class="products" id="products"></div>
+      // Generate unique order ID
+      const orderId = "ORD" + Date.now();
 
-    <!-- Cart Section -->
-    <div class="cart" id="cart">
-      <h2>Your Cart</h2>
-      <div id="cart-items"></div>
-      <p id="cart-total">Total: ₹0</p>
-      <button class="place-order" onclick="placeOrder()">Place Order</button>
-    </div>
-  </div>
+      // Collect form values
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const product = document.getElementById("product").value;
+      const quantity = document.getElementById("quantity").value;
 
-<script>
-  // Product List
-  const products = {
-    kukure: { name: "Kukure Green Chutney", price: 20, stock: 3, img:"https://www.jiomart.com/images/product/original/490005861/kurkure-green-chutney-style-90-g-product-images-o490005861-p490005861-0-202306150529.jpg"},
-    puffcorn: { name: "Puffcorn", price: 20, stock: 0, img:"https://www.jiomart.com/images/product/original/490008813/kurkure-puffcorn-yummy-cheese-90-g-product-images-o490008813-p490008813-0-202304281510.jpg"},
-    kitkat: { name: "KitKat", price: 149, stock: 1, img:"https://www.jiomart.com/images/product/original/491107973/nestle-kitkat-chocolate-37-3-g-product-images-o491107973-p491107973-0-202203170441.jpg"},
-    chocopie: { name: "Chocopie", price: 12, stock: 18, img:"https://www.jiomart.com/images/product/original/490000156/orion-choco-pie-336-g-product-images-o490000156-p490000156-0-202203150441.jpg"},
-    uncle: { name: "Uncle Chips", price: 50, stock: 1, img:"https://www.jiomart.com/images/product/original/490009786/uncle-chips-spicy-treat-60-g-product-images-o490009786-p490009786-0-202207121440.jpg"},
-    blueberry: { name: "Yoga Protein Bar (Blueberry)", price: 40, stock: 1, img:"https://www.jiomart.com/images/product/original/rvdbclzdk2/yoga-bar-protein-bar-blueberry-pie-65-g-product-images-orvdbclzdk2-p591771596-0-202203141609.jpg"},
-    strawberry: { name: "Strawberry Protein Bar", price: 40, stock: 1, img:"https://www.jiomart.com/images/product/original/491337381/yoga-bar-protein-bar-strawberry-65-g-product-images-o491337381-p491337381-0-202203150321.jpg"},
-    magic: { name: "Lays Magic Masala", price: 20, stock: 2, img:"https://www.jiomart.com/images/product/original/491258623/lays-indias-magic-masala-chips-115-g-product-images-o491258623-p491258623-0-202307281201.jpg"},
-    hot: { name: "Lays Hot & Sweet", price: 30, stock: 2, img:"https://www.jiomart.com/images/product/original/490008802/lays-hot-sweet-chilli-chips-52-g-product-images-o490008802-p490008802-0-202203170447.jpg"},
-    bingo: { name: "Bingo Mad Angles Very Peri Peri", price: 50, stock: 1, img:"https://www.jiomart.com/images/product/original/491509087/bingo-mad-angles-very-peri-peri-72-g-product-images-o491509087-p491509087-0-202203170502.jpg"},
-    hide: { name: "Hide & Seek", price: 30, stock: 2, img:"https://www.bigbasket.com/media/uploads/p/xxl/40225894_2_parle-hide-seek-fab-vanilla-choco-chip-cookies.jpg"}
-  };
+      // Prepare template parameters
+      const templateParams = {
+        order_id: orderId,
+        customer_name: name,
+        customer_email: email,
+        product_name: product,
+        quantity: quantity
+      };
 
-  let cart = [];
-
-  // Render Products
-  function renderProducts() {
-    const container = document.getElementById('products');
-    container.innerHTML = "";
-    for (let id in products) {
-      const p = products[id];
-      container.innerHTML += `
-        <div class="product-card">
-          <img src="${p.img}" alt="${p.name}">
-          <h2>${p.name}</h2>
-          <p>Price: ₹${p.price}</p>
-          <p id="stock-${id}">Stock: ${p.stock}</p>
-          <button id="btn-${id}" ${p.stock <= 0 ? "disabled" : ""} onclick="addToCart('${id}')">
-            ${p.stock <= 0 ? "Out of Stock" : "Add to Cart"}
-          </button>
-        </div>
-      `;
-    }
-  }
-
-  // Add to Cart
-  function addToCart(id) {
-    if (products[id].stock > 0) {
-      cart.push(products[id]);
-      products[id].stock--;
-      updateCart();
-      renderProducts();
-    }
-  }
-
-  // Update Cart
-  function updateCart() {
-    const cartItems = document.getElementById('cart-items');
-    const cartTotal = document.getElementById('cart-total');
-    cartItems.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-      total += item.price;
-      cartItems.innerHTML += `<p>${item.name} - ₹${item.price}</p>`;
+      // Send mail via EmailJS
+      emailjs.send("service_glpy52q", "template_yuafcfb", templateParams)
+      .then(function(response) {
+          document.getElementById("status").innerText = 
+            "✅ Order placed successfully! Confirmation sent to your email.";
+          console.log("SUCCESS!", response.status, response.text);
+      }, function(error) {
+          document.getElementById("status").innerText = 
+            "❌ Failed to place order. Try again.";
+          console.error("FAILED...", error);
+      });
     });
-
-    cartTotal.innerText = `Total: ₹${total}`;
-  }
-
-  // Place Order
-  function placeOrder() {
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
-    alert("✅ Order placed successfully!\nPlease pay via UPI: 9482104387@fam\nCollect from Room B116.");
-    cart = [];
-    updateCart();
-  }
-
-  renderProducts();
-</script>
+  </script>
 </body>
 </html>
-
-
