@@ -105,7 +105,7 @@ header {
   100% {transform:scale(1); opacity:1;}
 }
 #cart h2 { color:#ff416c; font-size:28px; margin-bottom:15px; }
-#cart input { width:85%; padding:10px; margin-bottom:15px; border-radius:12px; border:2px solid #ff6f61; font-size:16px; }
+#cart input { width:85%; padding:10px; margin-bottom:10px; border-radius:12px; border:2px solid #ff6f61; font-size:16px; }
 #cart ul { list-style:none; padding:0; max-height:300px; overflow-y:auto; }
 #cart li { font-size:16px; margin:8px 0; padding:10px; background: linear-gradient(135deg, #e0f7fa, #fff5f7); border-radius:12px; transition: transform 0.3s, background 0.3s; }
 #cart li:hover { transform: translateX(8px) scale(1.02); background: linear-gradient(135deg, #ffd200, #f7971e); color:#333; }
@@ -123,6 +123,8 @@ header {
 
 <div id="cart">
   <h2>Your Cart</h2>
+  <input type="text" id="customer-name" placeholder="Enter your name">
+  <input type="text" id="customer-room" placeholder="Enter your room number">
   <input type="email" id="customer-email" placeholder="Enter your email for confirmation">
   <ul id="cart-items"></ul>
   <p id="cart-total">Total: ₹0</p>
@@ -144,73 +146,76 @@ header {
     { name: "Strawberry Protein Bar", stock: 1, price: 40, img:"https://www.jiomart.com/images/product/original/491337381/yoga-bar-protein-bar-strawberry-65-g-product-images-o491337381-p491337381-0-202203150321.jpg" },
     { name: "Lays Magic Masala", stock: 2, price: 20, img:"https://www.jiomart.com/images/product/original/491258623/lays-indias-magic-masala-chips-115-g-product-images-o491258623-p491258623-0-202307281201.jpg" },
     { name: "Lays Hot & Sweet", stock: 2, price: 30, img:"https://www.jiomart.com/images/product/original/490008802/lays-hot-sweet-chilli-chips-52-g-product-images-o490008802-p490008802-0-202203170447.jpg" },
-    { name: "Bingo Mad Angles Very Peri Peri", stock: 1, price: 50, img:"https://www.jiomart.com/images/product/original/491509087/bingo-mad-angles-very-peri-peri-72-g-product-images-o491509087-p491509087-0-202203170502.jpg" },
+    { name: "Bingo Mad Angles Very Peri Peri", stock: 2, price: 50, img:"https://www.jiomart.com/images/product/original/491509087/bingo-mad-angles-very-peri-peri-72-g-product-images-o491509087-p491509087-0-202203170502.jpg" },
     { name: "Hide & Seek", stock: 2, price: 30, img:"https://www.bigbasket.com/media/uploads/p/xxl/40225894_2_parle-hide-seek-fab-vanilla-choco-chip-cookies.jpg" }
   ];
 
-  // ----------- Load Stock from LocalStorage -----------
-  const savedStock = localStorage.getItem('productsStock');
-  if(savedStock){
-    const stockArr = JSON.parse(savedStock);
-    products.forEach((p, i)=> { p.stock = stockArr[i]; });
+  // Load stock from LocalStorage
+  if(localStorage.getItem('products')){
+    products = JSON.parse(localStorage.getItem('products'));
   }
 
   let cart = [];
 
   // ----------- Render Products -----------
   function renderProducts(){
-    const productList = document.getElementById('product-list');
-    productList.innerHTML = '';
-    products.forEach((p,index)=>{
-      productList.innerHTML += `
+    const list = document.getElementById('product-list');
+    list.innerHTML = "";
+    products.forEach((p, idx)=>{
+      list.innerHTML += `
       <div class="product-card">
         <img src="${p.img}" alt="${p.name}">
         <h3>${p.name}</h3>
         <p>Price: ₹${p.price}</p>
-        <p>Stock: <span id="stock-${index}">${p.stock}</span></p>
-        <button onclick="addToCart(${index})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Out of Stock":"Add to Cart"}</button>
+        <p>Stock: ${p.stock}</p>
+        <button ${p.stock===0 ? "disabled" : ""} onclick="addToCart(${idx})">
+          ${p.stock===0 ? "Out of Stock" : "Add to Cart"}
+        </button>
       </div>`;
     });
   }
 
   // ----------- Add to Cart -----------
-  function addToCart(index){
-    if(products[index].stock>0){
-      products[index].stock--;
-      localStorage.setItem('productsStock', JSON.stringify(products.map(p=>p.stock)));
-      cart.push(products[index]);
-      document.getElementById(`stock-${index}`).innerText = products[index].stock;
+  function addToCart(idx){
+    if(products[idx].stock>0){
+      cart.push({...products[idx]});
+      products[idx].stock--;
+      localStorage.setItem('products', JSON.stringify(products));
       displayCart();
-    } else { alert("Out of stock!"); }
+      renderProducts();
+    }
   }
 
   // ----------- Display Cart -----------
   function displayCart(){
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
-    cartItems.innerHTML = '';
+    cartItems.innerHTML = "";
     let total = 0;
-    cart.forEach(item=>{
+    cart.forEach((item, i)=>{
       total += item.price;
-      const li = document.createElement('li');
-      li.innerText = `${item.name} - ₹${item.price}`;
-      cartItems.appendChild(li);
+      cartItems.innerHTML += `<li>${item.name} - ₹${item.price}</li>`;
     });
     cartTotal.innerText = `Total: ₹${total}`;
   }
 
   // ----------- Place Order -----------
   function placeOrder(){
+    const name = document.getElementById('customer-name').value;
+    const room = document.getElementById('customer-room').value;
     const email = document.getElementById('customer-email').value;
+
+    if(!name || !room || !email){ alert("Please fill all fields!"); return; }
     if(cart.length===0){ alert("Cart is empty!"); return; }
-    if(!email){ alert("Please enter your email!"); return; }
 
     const orderDetails = cart.map(i=>`${i.name} - ₹${i.price}`).join(", ");
     const totalAmount = cart.reduce((sum,i)=>sum+i.price,0);
 
     const templateParams = {
+      customer_name: name,
+      customer_room: room,
       customer_email: email,
-      message: `Your order has been placed!\nItems: ${orderDetails}\nTotal: ₹${totalAmount}`
+      message: `Your order has been placed!\nItems: ${orderDetails}\nTotal: ₹${totalAmount}\nCollect from Room B116.`
     };
 
     emailjs.send("service_glpy52q","template_lmdqequ",templateParams)
@@ -218,7 +223,9 @@ header {
         alert("✅ Order placed successfully! Confirmation sent via email.");
         cart = [];
         displayCart();
-        document.getElementById('customer-email').value = '';
+        document.getElementById('customer-name').value="";
+        document.getElementById('customer-room').value="";
+        document.getElementById('customer-email').value="";
         renderProducts();
       }, (err)=>{
         alert("❌ Failed to send email. Error: "+JSON.stringify(err));
@@ -226,7 +233,8 @@ header {
   }
 
   renderProducts();
-</script>
+  displayCart();
 
+</script>
 </body>
 </html>
