@@ -3,93 +3,194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sarangi Mart</title>
+<title>🎉 Sarangi Mart</title>
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <style>
-  body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin:0; padding:0; color:#333;}
-  header { background:#4CAF50; color:white; text-align:center; padding:20px; font-size:28px; font-weight:bold; letter-spacing:1px; }
-  .container { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; padding:30px;}
-  .product-card { background:white; border-radius:15px; padding:20px; text-align:center; box-shadow:0 6px 12px rgba(0,0,0,0.1); transition:transform 0.3s ease, box-shadow 0.3s ease;}
-  .product-card:hover { transform: translateY(-10px); box-shadow:0 10px 20px rgba(0,0,0,0.2);}
-  .product-card h3 { font-size:20px; color:#4CAF50; margin-bottom:10px;}
-  .product-card p { font-size:16px; margin:5px 0;}
-  button { background:#4CAF50; color:white; border:none; padding:10px 20px; margin-top:10px; border-radius:25px; font-size:16px; cursor:pointer; transition:background 0.3s, transform 0.2s;}
-  button:hover { background:#388E3C; transform:scale(1.05);}
-  #cart { background:#fff; margin:30px auto; padding:20px; border-radius:15px; width:80%; box-shadow:0 6px 12px rgba(0,0,0,0.1);}
-  #cart h2 { text-align:center; color:#4CAF50;}
-  #cart input { width:90%; padding:8px; margin:10px 0; border-radius:8px; border:1px solid #ccc; }
-  #cart ul { list-style:none; padding:0;}
-  #cart li { font-size:16px; margin:8px 0; padding:8px; background:#f4f8ff; border-radius:8px; transition:transform 0.3s;}
-  #cart li:hover { transform:translateX(6px); background:#e3f2fd;}
-  #cart-total { font-weight:bold; font-size:18px; margin-top:10px; text-align:center; }
+/* ---------- General ---------- */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin:0; padding:0;
+  background: linear-gradient(135deg, #ffe4e1, #e0ffff, #fffacd);
+  color:#333;
+  animation: backgroundMove 30s linear infinite;
+}
+@keyframes backgroundMove {
+  0% {background-position:0 0;}
+  50% {background-position:100% 100%;}
+  100% {background-position:0 0;}
+}
+header {
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
+  color:white;
+  text-align:center;
+  padding:25px;
+  font-size:32px;
+  font-weight:bold;
+  letter-spacing:2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ---------- Product Grid ---------- */
+.container {
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap:25px;
+  padding:35px;
+}
+
+/* ---------- Product Card ---------- */
+.product-card {
+  background: linear-gradient(145deg, #fef9ff, #e0f7fa);
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 8px 16px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow:0 15px 25px rgba(0,0,0,0.25);
+}
+.product-card img {
+  width:150px; height:150px; object-fit:cover;
+  border-radius:12px;
+  margin-bottom:10px;
+  transition: transform 0.3s ease;
+}
+.product-card img:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+.product-card h3 {
+  font-size:20px;
+  color:#ff6f61;
+  margin-bottom:8px;
+  text-shadow: 1px 1px 2px #fff;
+}
+.product-card p {
+  font-size:16px;
+  margin:4px 0;
+  font-weight:500;
+}
+.product-card button {
+  background: linear-gradient(to right, #43cea2, #185a9d);
+  color:white;
+  border:none;
+  padding:10px 20px;
+  margin-top:12px;
+  border-radius:25px;
+  font-size:16px;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+.product-card button:hover {
+  transform:scale(1.1);
+  background: linear-gradient(to right, #f7971e, #ffd200);
+  color:#333;
+}
+
+/* ---------- Cart ---------- */
+#cart {
+  background: linear-gradient(135deg, #fff5f7, #e0fff7);
+  margin:40px auto;
+  padding:25px;
+  border-radius:20px;
+  width:90%;
+  max-width:600px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  text-align:center;
+  animation: popIn 1s ease;
+}
+@keyframes popIn {
+  0% {transform:scale(0.9); opacity:0;}
+  100% {transform:scale(1); opacity:1;}
+}
+#cart h2 { color:#ff416c; font-size:28px; margin-bottom:15px; }
+#cart input { width:85%; padding:10px; margin-bottom:15px; border-radius:12px; border:2px solid #ff6f61; font-size:16px; }
+#cart ul { list-style:none; padding:0; max-height:300px; overflow-y:auto; }
+#cart li { font-size:16px; margin:8px 0; padding:10px; background: linear-gradient(135deg, #e0f7fa, #fff5f7); border-radius:12px; transition: transform 0.3s, background 0.3s; }
+#cart li:hover { transform: translateX(8px) scale(1.02); background: linear-gradient(135deg, #ffd200, #f7971e); color:#333; }
+#cart-total { font-weight:bold; font-size:20px; margin-top:15px; color:#43cea2; }
+#cart button { width:90%; padding:12px; border-radius:25px; font-size:18px; background: linear-gradient(to right, #ff4b2b, #ff416c); color:white; border:none; cursor:pointer; transition: all 0.3s ease; }
+#cart button:hover { background: linear-gradient(to right, #43cea2, #185a9d); transform: scale(1.05); }
+
 </style>
 </head>
 <body>
 
-<header>🛒 Welcome to Sarangi Mart</header>
+<header>🛒 Sarangi Mart - Snacks & Treats</header>
 
 <div class="container" id="product-list"></div>
 
 <div id="cart">
   <h2>Your Cart</h2>
-  <label>Enter Your Email:</label>
-  <input type="email" id="customer-email" placeholder="you@example.com">
+  <input type="email" id="customer-email" placeholder="Enter your email for confirmation">
   <ul id="cart-items"></ul>
   <p id="cart-total">Total: ₹0</p>
   <button onclick="placeOrder()">Place Order</button>
 </div>
 
 <script>
+  // Initialize EmailJS
   (function(){ emailjs.init("NHtKUf_XQBBT-W7PY"); })();
 
-  const products = [
-    { name: "Kukure Green Chutney", stock: 3, price: 20 },
-    { name: "Puffcorn", stock: 0, price: 20 },
-    { name: "Kitkat", stock: 1, price: 149 },
-    { name: "Chocopie", stock: 18, price: 12 },
-    { name: "Uncle Chips", stock: 1, price: 50 },
-    { name: "Yoga Protein Bar Blueberry", stock: 1, price: 40 },
-    { name: "Strawberry Protein Bar", stock: 1, price: 40 },
-    { name: "Lays Magic Masala", stock: 2, price: 20 },
-    { name: "Lays Hot & Sweet", stock: 2, price: 30 },
-    { name: "Bingo Mad Angles Very Peri Peri", stock: 1, price: 50 },
-    { name: "Hide & Seek", stock: 2, price: 30 }
+  // ----------- Product Data -----------
+  let products = [
+    { name: "Kukure Green Chutney", stock: 3, price: 20, img:"https://www.jiomart.com/images/product/original/490005861/kurkure-green-chutney-style-90-g-product-images-o490005861-p490005861-0-202306150529.jpg" },
+    { name: "Puffcorn", stock: 2, price: 20, img:"https://www.jiomart.com/images/product/original/490008813/kurkure-puffcorn-yummy-cheese-90-g-product-images-o490008813-p490008813-0-202304281510.jpg" },
+    { name: "Kitkat", stock: 1, price: 149, img:"https://www.jiomart.com/images/product/original/491107973/nestle-kitkat-chocolate-37-3-g-product-images-o491107973-p491107973-0-202203170441.jpg" },
+    { name: "Chocopie", stock: 18, price: 12, img:"https://www.jiomart.com/images/product/original/490000156/orion-choco-pie-336-g-product-images-o490000156-p490000156-0-202203150441.jpg" },
+    { name: "Uncle Chips", stock: 1, price: 50, img:"https://www.jiomart.com/images/product/original/490009786/uncle-chips-spicy-treat-60-g-product-images-o490009786-p490009786-0-202207121440.jpg" },
+    { name: "Yoga Protein Bar Blueberry", stock: 1, price: 40, img:"https://www.jiomart.com/images/product/original/rvdbclzdk2/yoga-bar-protein-bar-blueberry-pie-65-g-product-images-orvdbclzdk2-p591771596-0-202203141609.jpg" },
+    { name: "Strawberry Protein Bar", stock: 1, price: 40, img:"https://www.jiomart.com/images/product/original/491337381/yoga-bar-protein-bar-strawberry-65-g-product-images-o491337381-p491337381-0-202203150321.jpg" },
+    { name: "Lays Magic Masala", stock: 2, price: 20, img:"https://www.jiomart.com/images/product/original/491258623/lays-indias-magic-masala-chips-115-g-product-images-o491258623-p491258623-0-202307281201.jpg" },
+    { name: "Lays Hot & Sweet", stock: 2, price: 30, img:"https://www.jiomart.com/images/product/original/490008802/lays-hot-sweet-chilli-chips-52-g-product-images-o490008802-p490008802-0-202203170447.jpg" },
+    { name: "Bingo Mad Angles Very Peri Peri", stock: 1, price: 50, img:"https://www.jiomart.com/images/product/original/491509087/bingo-mad-angles-very-peri-peri-72-g-product-images-o491509087-p491509087-0-202203170502.jpg" },
+    { name: "Hide & Seek", stock: 2, price: 30, img:"https://www.bigbasket.com/media/uploads/p/xxl/40225894_2_parle-hide-seek-fab-vanilla-choco-chip-cookies.jpg" }
   ];
+
+  // ----------- Load Stock from LocalStorage -----------
+  const savedStock = localStorage.getItem('productsStock');
+  if(savedStock){
+    const stockArr = JSON.parse(savedStock);
+    products.forEach((p, i)=> { p.stock = stockArr[i]; });
+  }
 
   let cart = [];
 
-  function renderProducts() {
+  // ----------- Render Products -----------
+  function renderProducts(){
     const productList = document.getElementById('product-list');
     productList.innerHTML = '';
-    products.forEach((product,index)=>{
+    products.forEach((p,index)=>{
       productList.innerHTML += `
-        <div class="product-card">
-          <h3>${product.name}</h3>
-          <p>Price: ₹${product.price}</p>
-          <p>Stock: <span id="stock-${index}">${product.stock}</span></p>
-          <button onclick="addToCart(${index})" ${product.stock<=0?"disabled":""}>${product.stock<=0?"Out of Stock":"Add to Cart"}</button>
-        </div>
-      `;
+      <div class="product-card">
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>Price: ₹${p.price}</p>
+        <p>Stock: <span id="stock-${index}">${p.stock}</span></p>
+        <button onclick="addToCart(${index})" ${p.stock<=0?"disabled":""}>${p.stock<=0?"Out of Stock":"Add to Cart"}</button>
+      </div>`;
     });
   }
 
+  // ----------- Add to Cart -----------
   function addToCart(index){
     if(products[index].stock>0){
       products[index].stock--;
-      document.getElementById(`stock-${index}`).innerText = products[index].stock;
+      localStorage.setItem('productsStock', JSON.stringify(products.map(p=>p.stock)));
       cart.push(products[index]);
+      document.getElementById(`stock-${index}`).innerText = products[index].stock;
       displayCart();
-    } else {
-      alert("Out of stock!");
-    }
+    } else { alert("Out of stock!"); }
   }
 
+  // ----------- Display Cart -----------
   function displayCart(){
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
     cartItems.innerHTML = '';
     let total = 0;
-    cart.forEach((item)=>{
+    cart.forEach(item=>{
       total += item.price;
       const li = document.createElement('li');
       li.innerText = `${item.name} - ₹${item.price}`;
@@ -98,22 +199,23 @@
     cartTotal.innerText = `Total: ₹${total}`;
   }
 
+  // ----------- Place Order -----------
   function placeOrder(){
     const email = document.getElementById('customer-email').value;
-    if(cart.length===0){ alert("Cart is empty!"); return;}
-    if(!email){ alert("Please enter your email!"); return;}
+    if(cart.length===0){ alert("Cart is empty!"); return; }
+    if(!email){ alert("Please enter your email!"); return; }
 
-    const orderDetails = cart.map(item=>`${item.name} - ₹${item.price}`).join(", ");
-    const totalAmount = cart.reduce((sum,item)=>sum+item.price,0);
+    const orderDetails = cart.map(i=>`${i.name} - ₹${i.price}`).join(", ");
+    const totalAmount = cart.reduce((sum,i)=>sum+i.price,0);
 
     const templateParams = {
       customer_email: email,
-      message: `Your order has been placed successfully!\nItems: ${orderDetails}\nTotal: ₹${totalAmount}`
+      message: `Your order has been placed!\nItems: ${orderDetails}\nTotal: ₹${totalAmount}`
     };
 
     emailjs.send("service_glpy52q","template_lmdqequ",templateParams)
       .then(()=>{
-        alert("✅ Order placed successfully! Confirmation sent to your email.");
+        alert("✅ Order placed successfully! Confirmation sent via email.");
         cart = [];
         displayCart();
         document.getElementById('customer-email').value = '';
@@ -128,5 +230,3 @@
 
 </body>
 </html>
-
-
