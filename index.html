@@ -17,6 +17,7 @@
   button:hover { background:#388E3C; transform:scale(1.05);}
   #cart { background:#fff; margin:30px auto; padding:20px; border-radius:15px; width:80%; box-shadow:0 6px 12px rgba(0,0,0,0.1);}
   #cart h2 { text-align:center; color:#4CAF50;}
+  #cart input { width:90%; padding:8px; margin:10px 0; border-radius:8px; border:1px solid #ccc; }
   #cart ul { list-style:none; padding:0;}
   #cart li { font-size:16px; margin:8px 0; padding:8px; background:#f4f8ff; border-radius:8px; transition:transform 0.3s;}
   #cart li:hover { transform:translateX(6px); background:#e3f2fd;}
@@ -32,7 +33,7 @@
 <div id="cart">
   <h2>Your Cart</h2>
   <label>Enter Your Email:</label>
-  <input type="email" id="customer-email" placeholder="you@example.com" style="width:90%; padding:8px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;">
+  <input type="email" id="customer-email" placeholder="you@example.com">
   <ul id="cart-items"></ul>
   <p id="cart-total">Total: ₹0</p>
   <button onclick="placeOrder()">Place Order</button>
@@ -51,7 +52,7 @@
     { name: "Strawberry Protein Bar", stock: 1, price: 40 },
     { name: "Lays Magic Masala", stock: 2, price: 20 },
     { name: "Lays Hot & Sweet", stock: 2, price: 30 },
-    { name: "Bingo Mad Angles Very Peri Peri", stock: 1, price: 30 },
+    { name: "Bingo Mad Angles Very Peri Peri", stock: 1, price: 50 },
     { name: "Hide & Seek", stock: 2, price: 30 }
   ];
 
@@ -78,6 +79,8 @@
       document.getElementById(`stock-${index}`).innerText = products[index].stock;
       cart.push(products[index]);
       displayCart();
+    } else {
+      alert("Out of stock!");
     }
   }
 
