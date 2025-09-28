@@ -1,185 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sarangi Mart</title>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header {
-      background: #4CAF50;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 30px;
-    }
-    .product-card {
-      background: white;
-      border-radius: 15px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .product-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
-    .product-card h3 {
-      font-size: 20px;
-      color: #4CAF50;
-      margin-bottom: 10px;
-    }
-    .product-card p {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-    button {
-      background: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin-top: 10px;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-    button:hover {
-      background: #388E3C;
-      transform: scale(1.05);
-    }
-    #cart {
-      background: #fff;
-      margin: 30px auto;
-      padding: 20px;
-      border-radius: 15px;
-      width: 80%;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-    #cart h2 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    #cart ul {
-      list-style: none;
-      padding: 0;
-    }
-    #cart li {
-      font-size: 16px;
-      margin: 8px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sarangi Mart</title>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<style>
+  body { font-family: 'Poppins', sans-serif; background: #f0f4f8; margin:0; padding:0; color:#333;}
+  header { background:#4CAF50; color:white; text-align:center; padding:20px; font-size:28px; font-weight:bold; letter-spacing:1px; }
+  .container { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; padding:30px;}
+  .product-card { background:white; border-radius:15px; padding:20px; text-align:center; box-shadow:0 6px 12px rgba(0,0,0,0.1); transition:transform 0.3s ease, box-shadow 0.3s ease;}
+  .product-card:hover { transform: translateY(-10px); box-shadow:0 10px 20px rgba(0,0,0,0.2);}
+  .product-card h3 { font-size:20px; color:#4CAF50; margin-bottom:10px;}
+  .product-card p { font-size:16px; margin:5px 0;}
+  button { background:#4CAF50; color:white; border:none; padding:10px 20px; margin-top:10px; border-radius:25px; font-size:16px; cursor:pointer; transition:background 0.3s, transform 0.2s;}
+  button:hover { background:#388E3C; transform:scale(1.05);}
+  #cart { background:#fff; margin:30px auto; padding:20px; border-radius:15px; width:80%; box-shadow:0 6px 12px rgba(0,0,0,0.1);}
+  #cart h2 { text-align:center; color:#4CAF50;}
+  #cart ul { list-style:none; padding:0;}
+  #cart li { font-size:16px; margin:8px 0; padding:8px; background:#f4f8ff; border-radius:8px; transition:transform 0.3s;}
+  #cart li:hover { transform:translateX(6px); background:#e3f2fd;}
+  #cart-total { font-weight:bold; font-size:18px; margin-top:10px; text-align:center; }
+</style>
 </head>
 <body>
-  <header>🛒 Welcome to Sarangi Mart</header>
 
-  <div class="container" id="product-list">
-    <!-- Products will be injected here -->
-  </div>
+<header>🛒 Welcome to Sarangi Mart</header>
 
-  <div id="cart">
-    <h2>Your Cart</h2>
-    <ul id="cart-items"></ul>
-    <button onclick="placeOrder()">Place Order</button>
-  </div>
+<div class="container" id="product-list"></div>
 
-  <script>
-    (function(){
-      emailjs.init("NHtKUf_XQBBT-W7PY"); // Your Public Key
-    })();
+<div id="cart">
+  <h2>Your Cart</h2>
+  <label>Enter Your Email:</label>
+  <input type="email" id="customer-email" placeholder="you@example.com" style="width:90%; padding:8px; margin-bottom:10px; border-radius:8px; border:1px solid #ccc;">
+  <ul id="cart-items"></ul>
+  <p id="cart-total">Total: ₹0</p>
+  <button onclick="placeOrder()">Place Order</button>
+</div>
 
-    const products = [
-      { name: "Kukure Green Chutney", stock: 3, price: 20 },
-      { name: "Puffcons", stock: 2, price: 20 },
-      { name: "Kitkat", stock: 5, price: 149 },
-      { name: "Chocopie", stock: 18, price: 12 },
-      { name: "Uncle Chips", stock: 1, price: 50 },
-      { name: "Yoga Protein Bar Blueberry", stock: 5, price: 40 },
-      { name: "Strawberry Protein Bar", stock: 5, price: 40 },
-      { name: "Lays Magic Masala", stock: 2, price: 20 },
-      { name: "Lays Hot & Sweet", stock: 2, price: 30 },
-      { name: "Bingo Mad Angles Very Peri Peri", stock: 2, price: 30 }
-    ];
+<script>
+  (function(){ emailjs.init("NHtKUf_XQBBT-W7PY"); })();
 
-    let cart = [];
+  const products = [
+    { name: "Kukure Green Chutney", stock: 3, price: 20 },
+    { name: "Puffcorn", stock: 2, price: 20 },
+    { name: "Kitkat", stock: 1, price: 149 },
+    { name: "Chocopie", stock: 18, price: 12 },
+    { name: "Uncle Chips", stock: 1, price: 50 },
+    { name: "Yoga Protein Bar Blueberry", stock: 1, price: 40 },
+    { name: "Strawberry Protein Bar", stock: 1, price: 40 },
+    { name: "Lays Magic Masala", stock: 2, price: 20 },
+    { name: "Lays Hot & Sweet", stock: 2, price: 30 },
+    { name: "Bingo Mad Angles Very Peri Peri", stock: 1, price: 30 },
+    { name: "Hide & Seek", stock: 2, price: 30 }
+  ];
 
-    function renderProducts() {
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-      products.forEach((product, index) => {
-        productList.innerHTML += `
-          <div class="product-card">
-            <h3>${product.name}</h3>
-            <p>Price: ₹${product.price}</p>
-            <p>Available: <span id="stock-${index}">${product.stock}</span></p>
-            <button onclick="addToCart(${index})">Add to Cart</button>
-          </div>
-        `;
-      });
+  let cart = [];
+
+  function renderProducts() {
+    const productList = document.getElementById('product-list');
+    productList.innerHTML = '';
+    products.forEach((product,index)=>{
+      productList.innerHTML += `
+        <div class="product-card">
+          <h3>${product.name}</h3>
+          <p>Price: ₹${product.price}</p>
+          <p>Stock: <span id="stock-${index}">${product.stock}</span></p>
+          <button onclick="addToCart(${index})" ${product.stock<=0?"disabled":""}>${product.stock<=0?"Out of Stock":"Add to Cart"}</button>
+        </div>
+      `;
+    });
+  }
+
+  function addToCart(index){
+    if(products[index].stock>0){
+      products[index].stock--;
+      document.getElementById(`stock-${index}`).innerText = products[index].stock;
+      cart.push(products[index]);
+      displayCart();
     }
+  }
 
-    function addToCart(index) {
-      if (products[index].stock > 0) {
-        products[index].stock--;
-        document.getElementById(`stock-${index}`).innerText = products[index].stock;
+  function displayCart(){
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    cartItems.innerHTML = '';
+    let total = 0;
+    cart.forEach((item)=>{
+      total += item.price;
+      const li = document.createElement('li');
+      li.innerText = `${item.name} - ₹${item.price}`;
+      cartItems.appendChild(li);
+    });
+    cartTotal.innerText = `Total: ₹${total}`;
+  }
 
-        cart.push(products[index].name + " - ₹" + products[index].price);
-        displayCart();
-      } else {
-        alert("Out of stock!");
-      }
-    }
+  function placeOrder(){
+    const email = document.getElementById('customer-email').value;
+    if(cart.length===0){ alert("Cart is empty!"); return;}
+    if(!email){ alert("Please enter your email!"); return;}
 
-    function displayCart() {
-      const cartItems = document.getElementById('cart-items');
-      cartItems.innerHTML = '';
-      cart.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        cartItems.appendChild(li);
-      });
-    }
+    const orderDetails = cart.map(item=>`${item.name} - ₹${item.price}`).join(", ");
+    const totalAmount = cart.reduce((sum,item)=>sum+item.price,0);
 
-    function placeOrder() {
-      if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-      }
+    const templateParams = {
+      customer_email: email,
+      message: `Your order has been placed successfully!\nItems: ${orderDetails}\nTotal: ₹${totalAmount}`
+    };
 
-      const orderDetails = cart.join(", ");
-
-      emailjs.send("service_glpy52q", "template_lmdqequ
-", {
-        to_name: "Customer",
-        message: `Your order has been placed successfully! Items: ${orderDetails}`
-      }).then(() => {
-        alert("✅ Order placed successfully! Confirmation email sent.");
+    emailjs.send("service_glpy52q","template_lmdqequ",templateParams)
+      .then(()=>{
+        alert("✅ Order placed successfully! Confirmation sent to your email.");
         cart = [];
         displayCart();
-      }, (err) => {
-        alert("❌ Failed to send email. Error: " + JSON.stringify(err));
+        document.getElementById('customer-email').value = '';
+        renderProducts();
+      }, (err)=>{
+        alert("❌ Failed to send email. Error: "+JSON.stringify(err));
       });
-    }
+  }
 
-    renderProducts();
-  </script>
+  renderProducts();
+</script>
+
 </body>
 </html>
-
