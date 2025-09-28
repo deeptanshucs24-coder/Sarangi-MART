@@ -28,10 +28,7 @@
     animation: spin 10s linear infinite;
   }
 
-  @keyframes spin {
-    0% {transform: rotate(0deg);}
-    100% {transform: rotate(360deg);}
-  }
+  @keyframes spin {0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);}}
 
   h1 { font-size: 36px; margin:10px 0; letter-spacing: 3px; text-shadow: 2px 2px #0003; }
 
@@ -48,19 +45,8 @@
     font-weight: 600;
   }
 
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 20px;
-  }
-
-  .products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    flex: 3;
-  }
+  .container { display: flex; flex-wrap: wrap; justify-content: space-around; padding: 20px; }
+  .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; flex: 3; }
 
   .product-card {
     background: #ffffffcc;
@@ -72,52 +58,13 @@
     position: relative;
   }
 
-  .product-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.5);
-  }
-
-  .product-card img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-bottom: 10px;
-    border-radius: 12px;
-  }
-
-  .product-card h2 {
-    font-size: 18px;
-    margin: 5px 0;
-  }
-
-  .product-card p {
-    margin: 3px 0;
-    font-size: 14px;
-  }
-
-  .stock {
-    font-weight: bold;
-    padding: 3px 5px;
-    border-radius: 6px;
-    display: inline-block;
-  }
-
-  .btn-add {
-    margin-top: 8px;
-    padding: 8px 12px;
-    border: none;
-    background: #ff4b2b;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    position: relative;
-  }
-
-  .btn-add:hover {
-    background: #ff416c;
-    transform: scale(1.05);
-  }
+  .product-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 12px 25px rgba(0,0,0,0.5); }
+  .product-card img { width: 150px; height: 150px; object-fit: cover; margin-bottom: 10px; border-radius: 12px; }
+  .product-card h2 { font-size: 18px; margin: 5px 0; }
+  .product-card p { margin: 3px 0; font-size: 14px; }
+  .stock { font-weight: bold; padding: 3px 5px; border-radius: 6px; display: inline-block; }
+  .btn-add { margin-top: 8px; padding: 8px 12px; border: none; background: #ff4b2b; color: white; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+  .btn-add:hover { background: #ff416c; transform: scale(1.05); }
 
   .cart {
     flex: 1;
@@ -130,21 +77,9 @@
     margin-top: 20px;
   }
 
-  .cart h2 {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 10px;
-  }
-
+  .cart h2 { text-align: center; font-size: 22px; margin-bottom: 10px; }
   .cart ul { list-style: none; padding: 0; }
-
-  .cart li {
-    background: #fffae6;
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 6px;
-    font-weight: 600;
-  }
+  .cart li { background: #fffae6; margin: 5px 0; padding: 8px; border-radius: 6px; font-weight: 600; }
 
   .place-order {
     margin-top: 15px;
@@ -159,34 +94,10 @@
     font-weight: bold;
     transition: 0.3s;
   }
+  .place-order:hover { background: #00e676; transform: scale(1.05); }
 
-  .place-order:hover {
-    background: #00e676;
-    transform: scale(1.05);
-  }
-
-  .user-info input {
-    margin: 5px 0;
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-
-  .toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #ff4b2b;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 10px;
-    display: none;
-    font-weight: bold;
-    z-index: 1000;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  }
+  .user-info input { margin: 5px 0; width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+  .toast { position: fixed; bottom: 30px; right: 30px; background: #ff4b2b; color: white; padding: 12px 18px; border-radius: 10px; display: none; font-weight: bold; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 </style>
 </head>
 <body>
@@ -202,9 +113,7 @@
 </div>
 
 <div class="container">
-
   <div class="products" id="product-list"></div>
-
   <div class="cart">
     <h2>Your Cart</h2>
     <div class="user-info">
@@ -216,14 +125,13 @@
     <p id="cart-total">Total: ₹0</p>
     <button class="place-order" onclick="placeOrder()">Place Order</button>
   </div>
-
 </div>
 
 <div class="toast" id="toast">Item added to cart!</div>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-emailjs.init("NHTKUf_XQBBT-W7PY"); // your public key
+emailjs.init("NHTKUf_XQBBT-W7PY");
 
 let products = [
     { name:"Kukure Green Chutney", stock:3, price:20, img:"https://www.jiomart.com/images/product/original/490005861/kurkure-green-chutney-style-90-g-product-images-o490005861-p490005861-0-202306150529.jpg" },
@@ -239,95 +147,87 @@ let products = [
     { name:"Hide & Seek", stock:2, price:30, img:"https://www.bigbasket.com/media/uploads/p/xxl/40225894_2_parle-hide-seek-fab-vanilla-choco-chip-cookies.jpg" }
 ];
 
-if(localStorage.getItem('products')){
-  products = JSON.parse(localStorage.getItem('products'));
-}
-
 let cart = [];
 
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.style.display = 'block';
-  setTimeout(()=>{t.style.display='none';},1500);
-}
-
-function renderProducts(){
-  const list = document.getElementById('product-list');
-  list.innerHTML = "";
-  products.forEach((p, idx)=>{
-    let color = p.stock>5 ? '#4caf50' : p.stock>1 ? '#ffeb3b' : '#f44336';
-    let cartCount = cart.filter(item=>item.name===p.name).length;
-    list.innerHTML += `
-      <div class="product-card">
-        <img src="${p.img}" alt="${p.name}">
-        <h2>${p.name}</h2>
-        <p>Price: ₹${p.price}</p>
-        <p class="stock" style="background:${color}; color:#000;">Stock: ${p.stock}</p>
-        <button class="btn-add" ${p.stock===0 ? "disabled" : ""} onclick="addToCart(${idx})">
-          ${p.stock===0 ? "Out of Stock" : "Add to Cart" + (cartCount>0 ? " ("+cartCount+")" : "")}
-        </button>
-      </div>
-    `;
-  });
-}
-
-function addToCart(idx){
-  if(products[idx].stock>0){
-    cart.push({...products[idx]});
-    products[idx].stock--;
-    localStorage.setItem('products', JSON.stringify(products));
-    displayCart();
-    renderProducts();
-    showToast(`${products[idx].name} added to cart!`);
-  }
-}
-
-function displayCart(){
-  const cartItems = document.getElementById('cart-items');
-  cartItems.innerHTML = "";
-  let total = 0;
-  cart.forEach((item)=>{
-    total += item.price;
-    cartItems.innerHTML += `<li>${item.name} - ₹${item.price}</li>`;
-  });
-  document.getElementById('cart-total').innerText = `Total: ₹${total}`;
-}
-
-function placeOrder(){
-  const name = document.getElementById('customer-name').value;
-  const room = document.getElementById('customer-room').value;
-  const email = document.getElementById('customer-email').value;
-
-  if(!name || !room || !email){ alert("Fill all details!"); return; }
-  if(cart.length===0){ alert("Cart is empty!"); return; }
-
-  let orderDetails = cart.map(i=>`${i.name} - ₹${i.price}`).join(", ");
-  let totalAmount = cart.reduce((sum,i)=>sum+i.price,0);
-
-  const templateParams = {
-    customer_name: name,
-    customer_room: room,
-    customer_email: email,
-    message: `✅ Your order is confirmed!\nItems: ${orderDetails}\nTotal: ₹${totalAmount}\nCollect from Room B116.`
-  };
-
-  emailjs.send("service_glpy52q","template_lmdqequ",templateParams)
-    .then(()=>{ 
-      alert("Order placed! Confirmation sent via email.");
-      cart=[];
-      displayCart();
-      document.getElementById('customer-name').value="";
-      document.getElementById('customer-room').value="";
-      document.getElementById('customer-email').value="";
-      renderProducts();
-    }, (err)=>{
-      alert("❌ Failed to send email: "+JSON.stringify(err));
+function renderProducts() {
+    const container = document.getElementById('product-list');
+    container.innerHTML = '';
+    products.forEach((p, i)=>{
+        container.innerHTML += `
+        <div class="product-card">
+          <img src="${p.img}" alt="${p.name}">
+          <h2>${p.name}</h2>
+          <p>Price: ₹${p.price}</p>
+          <p class="stock">Stock: ${p.stock}</p>
+          <button class="btn-add" ${p.stock<=0?"disabled":""} onclick="addToCart(${i})">
+            ${p.stock<=0?"Out of Stock":"Add to Cart"}
+          </button>
+        </div>
+        `;
     });
 }
 
+function addToCart(i){
+    if(products[i].stock>0){
+        cart.push({...products[i]});
+        products[i].stock--;
+        renderProducts();
+        renderCart();
+        showToast("Added to cart!");
+    }
+}
+
+function renderCart(){
+    const ul = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    ul.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => { 
+        ul.innerHTML += `<li>${item.name} - ₹${item.price}</li>`; 
+        total += item.price;
+    });
+    totalEl.innerText = `Total: ₹${total}`;
+}
+
+function placeOrder(){
+    const name = document.getElementById('customer-name').value.trim();
+    const room = document.getElementById('customer-room').value.trim();
+    const email = document.getElementById('customer-email').value.trim();
+
+    if(!name || !room || !email){
+        alert("Please fill Name, Room Number & Email!");
+        return;
+    }
+    if(cart.length===0){ alert("Cart is empty!"); return; }
+
+    const orderItems = cart.map(i=>i.name).join(", ");
+    const total = cart.reduce((sum,i)=>sum+i.price,0);
+
+    const templateParams = {
+        from_name: name,
+        to_email: email,
+        room_number: room,
+        order_items: orderItems,
+        order_total: total
+    };
+
+    emailjs.send('service_glpy52q','template_lmdqequ', templateParams)
+        .then(res=>{
+            alert("✅ Order placed! Check your email for confirmation. Total: ₹"+total);
+            cart=[]; renderCart(); renderProducts();
+        }).catch(err=>{
+            alert("❌ Failed to send email. Error: "+JSON.stringify(err));
+        });
+}
+
+function showToast(msg){
+    const t = document.getElementById('toast');
+    t.innerText = msg; t.style.display='block';
+    setTimeout(()=>{ t.style.display='none'; },1500);
+}
+
 renderProducts();
-displayCart();
+renderCart();
 </script>
 </body>
 </html>
